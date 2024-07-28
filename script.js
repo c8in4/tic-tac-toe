@@ -1,34 +1,75 @@
 const gameBoard = (() => {
   const rows = 3;
   const columns = 3;
-  let board = [];
+  let grid = [];
 
+  // creates grid of rows x columns
   for (i = 0; i < rows; i++) {
-    board[i] = [];
+    grid[i] = [];
     for (j = 0; j < columns; j++) {
-      board[i].push('-');
+      grid[i].push('');
     };
   };
 
-  const getBoard = () => board;
+  // const getBoard = () => grid;
+  const getBoard = () => console.log(grid); // temporarily printing instead of returning
 
-  const printBoard = () => {
-    const boardCells = board.map((row) => row.map((cell) => cell));
-    console.log(boardCells);
+
+  const placeMarker = (row, column, marker) => {
+    grid[row][column] = marker;
+    // if (grid[row][column] === '') { grid[row][column] = marker };
   };
 
-return { getBoard, printBoard };
+  return { placeMarker, getBoard };
 
 })();
 
 
-gameBoard.getBoard();
+const gameController = (() => {
+  const createPlayer = (number) => {
+    return prompt(`Player ${number}'s name:`);
+  };
+  
+  const playerOneName = createPlayer(1);
+  const playerTwoName = createPlayer(2);
 
+  const board = gameBoard;
 
-const game = {};
+  const players = [
+    {
+      name: playerOneName,
+      token: 'X'
+    },
+    {
+      name: playerTwoName,
+      token: 'O'
+    }
+  ];
 
-const createPlayer = (name) => {
+  let activePlayer = players[0];
 
-  return {};
-};
+  const switchPlayerTurn = () => {
+    activePlayer = activePlayer === players[0] ? players[1] : players[0];
+  };
 
+  const getActivePlayer = () => activePlayer;
+
+  const printNewRound = () => {
+    board.getBoard();
+    console.log(`${getActivePlayer().name}'s turn.`);
+  };
+
+  const playRound = (row, column) => {
+    // console.log(`${getActivePlayer().name} finished`);
+    board.placeMarker(row, column, getActivePlayer().token);
+    switchPlayerTurn();
+    printNewRound();
+  };
+  
+  printNewRound();
+
+  return { playRound, getActivePlayer };
+
+})();
+
+const game = gameController;
