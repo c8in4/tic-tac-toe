@@ -1,74 +1,127 @@
-const gameBoard = (() => {
+const gameboard = () => {
   const rows = 3;
   const columns = 3;
-  let grid = [];
+  const grid = [];
 
-  // creates grid of rows x columns
-  for (i = 0; i < rows; i++) {
+  for (let i = 0; i < rows; i++) {
     grid[i] = [];
-    for (j = 0; j < columns; j++) {
-      grid[i].push('');
+    for (let j = 0; j < columns; j++) {
+      grid[i][j] = '';
     };
   };
 
-  // const getBoard = () => grid;
-  const getBoard = () => console.log(grid); // temporarily printing instead of returning
+  const getGrid = () => grid;
 
-
-  const placeMarker = (row, column, marker) => {
-    grid[row][column] = marker;
-    // if (grid[row][column] === '') { grid[row][column] = marker };
+  const placeToken = (row, column, token) => {
+    if (grid[row][column]) {
+      return false
+    }
+    grid[row][column] = token;
+    return true;
   };
 
-  return { placeMarker, getBoard };
-
-})();
-
-
-const gameController = (() => {
-  const createPlayer = (number) => {
-    return prompt(`Player ${number}'s name:`);
+  const checkForWin = () => {
+    if (
+      (
+        // check rows
+        grid[0][0] &&
+        grid[0][0] === grid[0][1] &&
+        grid[0][0] === grid[0][2]
+      ) ||
+      (
+        grid[1][0] &&
+        grid[1][0] === grid[1][1] &&
+        grid[1][0] === grid[1][2]
+      ) ||
+      (
+        grid[2][0] &&
+        grid[2][0] === grid[2][1] &&
+        grid[2][0] === grid[2][2]
+      ) ||
+      (
+        // check columns
+        grid[0][0] &&
+        grid[0][0] === grid[1][0] &&
+        grid[0][0] === grid[2][0]
+      ) ||
+      (
+        grid[0][1] &&
+        grid[0][1] === grid[1][1] &&
+        grid[0][1] === grid[2][1]
+      ) ||
+      (
+        grid[0][2] &&
+        grid[0][2] === grid[1][2] &&
+        grid[0][2] === grid[2][2]
+      ) ||
+      (
+        // check for diagonals
+        grid[0][0] &&
+        grid[0][0] === grid[1][1] &&
+        grid[0][0] === grid[2][2]
+      ) ||
+      (
+        grid[0][2] &&
+        grid[0][2] === grid[1][1] &&
+        grid[0][2] === grid[2][0]
+      )
+    ) {
+      return true
+    } else return false
   };
-  
-  const playerOneName = createPlayer(1);
-  const playerTwoName = createPlayer(2);
 
-  const board = gameBoard;
+  return { getGrid, placeToken, checkForWin }
 
-  const players = [
+};
+
+const getplayers = () => {
+  const playerOneName = prompt("Enter a name for Player 1:");
+  const playerTwoName = prompt("Enter a name for Player 2:");
+
+  return [
     {
       name: playerOneName,
-      token: 'X'
+      token: "X"
     },
     {
       name: playerTwoName,
-      token: 'O'
+      token: "O"
     }
-  ];
+  ]
+};
+
+const gameController = (() => {
+  const players = getplayers();
+  let board = gameboard();
 
   let activePlayer = players[0];
 
-  const switchPlayerTurn = () => {
+  const switchPlayer = () => {
     activePlayer = activePlayer === players[0] ? players[1] : players[0];
   };
 
-  const getActivePlayer = () => activePlayer;
-
-  const printNewRound = () => {
-    board.getBoard();
-    console.log(`${getActivePlayer().name}'s turn.`);
-  };
-
   const playRound = (row, column) => {
-    // console.log(`${getActivePlayer().name} finished`);
-    board.placeMarker(row, column, getActivePlayer().token);
-    switchPlayerTurn();
-    printNewRound();
-  };
-  
-  printNewRound();
+    if (board.placeToken(row, column, activePlayer.token) && !board.checkForWin()) {
+      switchPlayer();
+    };
+    // board.getGrid();
+    console.log(board.getGrid());
 
-  return { playRound, getActivePlayer };
+    if (board.checkForWin()) {
+      console.log(`${activePlayer.name} won`);
+      switchPlayer();
+    };
+  };
+
+  const resetGame = () => {
+    board = gameboard();
+  };
+
+  return { playRound, resetGame }
+
+})();
+
+const displayController = (() => {
 
 })();
 
