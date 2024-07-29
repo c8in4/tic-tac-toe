@@ -16,3 +16,14 @@ main {
   flex: 1;
   outline: 1px solid red;
 }
+
+#grid {
+  width: min(70vw, 70vh);
+  aspect-ratio: 1;
+  display: grid;
+  grid-template-rows: repeat(3, 1fr);
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1em;
+  background-color: black;
+
+}
