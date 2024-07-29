@@ -90,27 +90,27 @@ const gameBoard = () => {
   return { getGrid, placeToken, checkForWin, checkForTie }
 
 };
-
-// hard coded names for now
-const getplayers = () => {
-  const playerOneName = 'x';
-  // prompt("Enter a name for Player 1:");
-  const playerTwoName = 'o';
-  // prompt("Enter a name for Player 2:");
-
-  return [
-    {
-      name: playerOneName,
-      token: "X"
-    },
-    {
-      name: playerTwoName,
-      token: "O"
-    }
-  ]
-};
-
 const gameController = (() => {
+
+  // hard coded names for now
+  const getplayers = () => {
+    const playerOneName = 'x';
+    // prompt("Enter a name for Player 1:");
+    const playerTwoName = 'o';
+    // prompt("Enter a name for Player 2:");
+
+    return [
+      {
+        name: playerOneName,
+        token: "X"
+      },
+      {
+        name: playerTwoName,
+        token: "O"
+      }
+    ]
+  };
+
   const players = getplayers();
   let board;
   let activePlayer = players[0];
@@ -128,20 +128,25 @@ const gameController = (() => {
 
   const playRound = (row, column) => {
     if (gameRunning) {
+
       if (board.placeToken(row, column, activePlayer.token)) {
         if (board.checkForWin(activePlayer.token)) {
           winner = activePlayer;
+          console.log(`${winner.name} won`);
           gameRunning = false;
-        } else if (board.checkForTie()) {
-          gameRunning = false;
+        };
+        if (board.checkForTie()) {
           console.log(`That's a tie.`);
+          gameRunning = false;
         };
         switchPlayer();
       };
-      // temporarily logging to console
-      console.log(board.getGrid());
-      if (gameRunning) console.log(`${activePlayer.name}'s turn`);
-      if (winner) console.log(`${winner.name} won`); 
+
+      if (gameRunning) {
+        console.log(board.getGrid());
+        console.log(`${activePlayer.name}'s turn`);
+      }
+
     };
   };
 
@@ -149,7 +154,7 @@ const gameController = (() => {
     activePlayer = activePlayer === players[0] ? players[1] : players[0];
   };
 
-  return { startGame, playRound }
+  return { startGame, playRound, getplayers }
 
 })();
 
