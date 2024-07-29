@@ -1,4 +1,4 @@
-const gameboard = () => {
+const gameBoard = () => {
   const rows = 3;
   const columns = 3;
   const grid = [];
@@ -67,10 +67,27 @@ const gameboard = () => {
       )
     ) {
       return true
-    } else return false
+    };
+    return false
   };
 
-  return { getGrid, placeToken, checkForWin }
+  const checkForTie = () => {
+    if (
+      !checkForWin() &&
+      grid[0][0] &&
+      grid[0][1] &&
+      grid[0][2] &&
+      grid[1][0] &&
+      grid[1][1] &&
+      grid[1][2] &&
+      grid[2][0] &&
+      grid[2][1] &&
+      grid[2][2]
+    ) return true;
+    return false;
+  };
+
+  return { getGrid, placeToken, checkForWin, checkForTie }
 
 };
 
@@ -95,42 +112,44 @@ const getplayers = () => {
 
 const gameController = (() => {
   const players = getplayers();
-  let board = gameboard();
+  let board;
   let activePlayer = players[0];
   let gameRunning = false;
-  // let winner;
+  let winner;
 
   const startGame = () => {
+    board = gameBoard();
     gameRunning = true;
+    winner = '';
+    console.log(board.getGrid());
     console.log(`${activePlayer.name}'s turn`);
   };
 
-  
+
   const playRound = (row, column) => {
     if (gameRunning) {
       if (board.placeToken(row, column, activePlayer.token)) {
         if (board.checkForWin(activePlayer.token)) {
-          console.log(`${activePlayer.name} won`);
+          winner = activePlayer;
           gameRunning = false;
+        } else if (board.checkForTie()) {
+          gameRunning = false;
+          console.log(`That's a tie.`);
         };
         switchPlayer();
       };
       // temporarily logging to console
       console.log(board.getGrid());
-      console.log(`${activePlayer.name}'s turn`);
-    }
-    
+      if (gameRunning) console.log(`${activePlayer.name}'s turn`);
+      if (winner) console.log(`${winner.name} won`); 
+    };
   };
-  
+
   const switchPlayer = () => {
     activePlayer = activePlayer === players[0] ? players[1] : players[0];
   };
 
-  const resetGame = () => {
-    board = gameboard();
-  };
-
-  return { startGame, playRound, resetGame }
+  return { startGame, playRound }
 
 })();
 
