@@ -27,6 +27,10 @@ const gameController = (() => {
 
   // hard coded names for now
   const getplayers = () => {
+
+    // const playerOneInput = document.querySelector('#playerOne');
+    // const playerTwoInput = document.querySelector('#playerTwo');
+
     const playerOneName = 'x';
     // prompt("Enter a name for Player 1:");
     const playerTwoName = 'o';
@@ -57,10 +61,10 @@ const gameController = (() => {
     console.log(board.getBoard());
     console.log(`${activePlayer.name}'s turn`);
   };
-  
+
   const playRound = (row, column) => {
     if (gameRunning) {
-      
+
       if (board.placeToken(row, column, activePlayer.token)) {
         if (checkForWin(activePlayer.token)) {
           winner = activePlayer;
@@ -76,7 +80,7 @@ const gameController = (() => {
 
       if (gameRunning) console.log(`${activePlayer.name}'s turn`);
       console.log(board.getBoard());
-      
+
     };
   };
 
@@ -200,7 +204,7 @@ const screenController = (() => {
     game.startGame();
     updateScreen();
   });
-  
+
   game.startGame();
   updateScreen();
 
