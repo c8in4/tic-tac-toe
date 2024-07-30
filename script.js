@@ -20,7 +20,68 @@ const gameBoard = () => {
     return true;
   };
 
+  return { getGrid, placeToken }
+
+};
+const gameController = (() => {
+
+  // hard coded names for now
+  const getplayers = () => {
+    const playerOneName = 'x';
+    // prompt("Enter a name for Player 1:");
+    const playerTwoName = 'o';
+    // prompt("Enter a name for Player 2:");
+
+    return [
+      {
+        name: playerOneName,
+        token: "X"
+      },
+      {
+        name: playerTwoName,
+        token: "O"
+      }
+    ]
+  };
+
+  const players = getplayers();
+  let board;
+  let activePlayer = players[0];
+  let gameRunning = false;
+  let winner;
+
+  const startGame = () => {
+    board = gameBoard();
+    gameRunning = true;
+    winner = '';
+    console.log(board.getGrid());
+    console.log(`${activePlayer.name}'s turn`);
+  };
+
+  const playRound = (row, column) => {
+    if (gameRunning) {
+
+      if (board.placeToken(row, column, activePlayer.token)) {
+        if (checkForWin(activePlayer.token)) {
+          winner = activePlayer;
+          console.log(`${winner.name} won`);
+          gameRunning = false;
+        };
+        if (checkForTie()) {
+          console.log(`That's a tie.`);
+          gameRunning = false;
+        };
+        switchPlayer();
+      };
+
+      if (gameRunning) console.log(`${activePlayer.name}'s turn`);
+      console.log(board.getGrid());
+
+    };
+  };
+
   const checkForWin = (token) => {
+    const grid = board.getGrid();
     if (
       // check rows
       (
@@ -72,6 +133,7 @@ const gameBoard = () => {
   };
 
   const checkForTie = () => {
+    const grid = board.getGrid();
     if (
       !checkForWin() &&
       grid[0][0] &&
@@ -87,79 +149,24 @@ const gameBoard = () => {
     return false;
   };
 
-  return { getGrid, placeToken, checkForWin, checkForTie }
-
-};
-const gameController = (() => {
-
-  // hard coded names for now
-  const getplayers = () => {
-    const playerOneName = 'x';
-    // prompt("Enter a name for Player 1:");
-    const playerTwoName = 'o';
-    // prompt("Enter a name for Player 2:");
-
-    return [
-      {
-        name: playerOneName,
-        token: "X"
-      },
-      {
-        name: playerTwoName,
-        token: "O"
-      }
-    ]
-  };
-
-  const players = getplayers();
-  let board;
-  let activePlayer = players[0];
-  let gameRunning = false;
-  let winner;
-
-  const startGame = () => {
-    board = gameBoard();
-    gameRunning = true;
-    winner = '';
-    console.log(board.getGrid());
-    console.log(`${activePlayer.name}'s turn`);
-  };
-
-
-  const playRound = (row, column) => {
-    if (gameRunning) {
-
-      if (board.placeToken(row, column, activePlayer.token)) {
-        if (board.checkForWin(activePlayer.token)) {
-          winner = activePlayer;
-          console.log(`${winner.name} won`);
-          gameRunning = false;
-        };
-        if (board.checkForTie()) {
-          console.log(`That's a tie.`);
-          gameRunning = false;
-        };
-        switchPlayer();
-      };
-
-      if (gameRunning) {
-        console.log(board.getGrid());
-        console.log(`${activePlayer.name}'s turn`);
-      }
-
-    };
-  };
-
   const switchPlayer = () => {
     activePlayer = activePlayer === players[0] ? players[1] : players[0];
   };
 
-  return { startGame, playRound, getplayers }
+  const getActivePlayer = () => activePlayer;
+
+  return { startGame, playRound, getplayers, getActivePlayer }
 
 })();
 
-const displayController = (() => {
+const screenController = (() => {
+  const game = gameController;
+
+
+  // need: activePlayer, board, winner
+
+  return { game }
 
 })();
 
-const game = gameController;
+game = screenController;
