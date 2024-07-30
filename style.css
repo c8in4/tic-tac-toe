@@ -22,23 +22,41 @@ main {
   gap: 1rem;
 }
 
+button {
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: bold;
+}
+
+button:hover {
+  background-color: #afafaf;
+}
+
 #grid {
   width: min(70vw, 70vh);
   aspect-ratio: 1;
   display: grid;
   grid-template-rows: repeat(3, 1fr);
   grid-template-columns: repeat(3, 1fr);
-  gap: 0.5em;
+  gap: 0.5rem;
   background-color: black;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
 }
 
 #grid button {
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: white;
   border: none;
+  border-radius: 0.5rem;
   font-size: 15cqmin;
-  font-weight: bold;
+}
+
+#grid button:hover {
+  background-color: #eee;
 }
 
 input {
