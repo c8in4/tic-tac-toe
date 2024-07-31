@@ -25,16 +25,12 @@ const gameBoard = () => {
 };
 const gameController = (() => {
 
-  // hard coded names for now
   const getplayers = () => {
+    const playerOneInput = document.querySelector('#playerOne');
+    const playerTwoInput = document.querySelector('#playerTwo');
 
-    // const playerOneInput = document.querySelector('#playerOne');
-    // const playerTwoInput = document.querySelector('#playerTwo');
-
-    const playerOneName = 'x';
-    // prompt("Enter a name for Player 1:");
-    const playerTwoName = 'o';
-    // prompt("Enter a name for Player 2:");
+    const playerOneName = playerOneInput.value ? playerOneInput.value : 'Player 1';
+    const playerTwoName = playerTwoInput.value ? playerTwoInput.value : 'Player 2';
 
     return [
       {
@@ -48,18 +44,21 @@ const gameController = (() => {
     ]
   };
 
-  const players = getplayers();
-  let board = gameBoard();
-  let activePlayer = players[0];
+  let board;
+  let players;
+  let activePlayer;
+  let winner;
   let gameRunning = false;
-  let winner = '';
 
   const startGame = () => {
     board = gameBoard();
-    gameRunning = true;
+    players = getplayers();
+    activePlayer = players[0];
+    if (winner && winner.name == activePlayer.name) switchPlayer();
     winner = '';
-    console.log(board.getBoard());
+    gameRunning = true;
     console.log(`${activePlayer.name}'s turn`);
+    console.log(board.getBoard());
   };
 
   const playRound = (row, column) => {
