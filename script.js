@@ -158,8 +158,9 @@ const gameController = (() => {
 
   const getBoard = () => board.getBoard();
   const getActivePlayer = () => activePlayer;
+  const getWinner = () => winner;
 
-  return { startGame, playRound, getBoard, getplayers, getActivePlayer }
+  return { startGame, playRound, getBoard, getplayers, getActivePlayer, getWinner }
 
 })();
 
@@ -174,8 +175,13 @@ const screenController = (() => {
 
     const board = game.getBoard();
     const activePlayer = game.getActivePlayer();
-
-    infoDiv.textContent = `${activePlayer.name}'s turn`;
+    const winner = game.getWinner();
+  
+    let infoText = `${activePlayer.name}'s turn`;
+    if (winner) {
+      infoText = `${winner.name} won.`;
+    };
+    infoDiv.textContent = infoText;
 
     board.forEach((row, rowIndex) => {
       row.forEach((cell, columnIndex) => {
