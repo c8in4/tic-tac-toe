@@ -29,6 +29,13 @@ main {
   gap: 1rem;
 }
 
+input {
+  border: none;
+  background-color: #eee;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+}
+
 button {
   border: none;
   padding: 0.5rem 1rem;
