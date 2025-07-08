@@ -9,7 +9,7 @@
   <script src="script.js" defer></script>
 </head>
 
-<body>
+<body class="dark">
   <header>
     <h1>Tic Tac Toe</h1>
   </header>
@@ -40,6 +40,13 @@
   <footer>
     <small>made by c8in4</small>
   </footer>
+
+  <div class="theme-button" onclick="toggleTheme()">Switch Theme</div>
+  <script>
+    function toggleTheme() {
+      document.body.classList.toggle('dark')
+    }
+  </script>
 </body>
 
 </html>
