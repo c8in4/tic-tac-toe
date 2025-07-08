@@ -18,16 +18,17 @@ header,
 footer {
   padding: 1rem 0;
 }
+
 main {
-  margin: 1rem;
+  /* margin: 1rem;
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: 1rem; */
 }
 
-#inputs {
+/* #inputs {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -80,4 +81,4 @@ button:hover {
 
 input {
   text-align: center;
-}
+} */

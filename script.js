@@ -1,218 +1,231 @@
-const gameBoard = () => {
-  const rows = 3;
-  const columns = 3;
-  const board = [];
+// TODO:
+// store gameboard as array inside of Gameboard object
+// players in objects
+// object to control the flow of the game
 
-  for (let i = 0; i < rows; i++) {
-    board[i] = [];
-    for (let j = 0; j < columns; j++) {
-      board[i][j] = '';
-    };
-  };
+// factories whenever possible to keep code minimal
+// gameboard and displayController should be IIFE
 
-  const getBoard = () => board;
+// 3 objects: game, player, gameboard
 
-  const placeToken = (row, column, token) => {
-    if (board[row][column]) {
-      return false
-    }
-    board[row][column] = token;
-    return true;
-  };
 
-  return { getBoard, placeToken }
 
-};
-const gameController = (() => {
 
-  const getplayers = () => {
-    const playerOneInput = document.querySelector('#playerOne');
-    const playerTwoInput = document.querySelector('#playerTwo');
+// const gameBoard = () => {
+//   const rows = 3;
+//   const columns = 3;
+//   const board = [];
 
-    const playerOneName = playerOneInput.value ? playerOneInput.value : 'Player 1';
-    const playerTwoName = playerTwoInput.value ? playerTwoInput.value : 'Player 2';
+//   for (let i = 0; i < rows; i++) {
+//     board[i] = [];
+//     for (let j = 0; j < columns; j++) {
+//       board[i][j] = '';
+//     };
+//   };
 
-    return [
-      {
-        name: playerOneName,
-        token: "X"
-      },
-      {
-        name: playerTwoName,
-        token: "O"
-      }
-    ]
-  };
+//   const getBoard = () => board;
 
-  let board;
-  let players;
-  let activePlayer;
-  let winner;
-  let gameRunning = false;
+//   const placeToken = (row, column, token) => {
+//     if (board[row][column]) {
+//       return false
+//     }
+//     board[row][column] = token;
+//     return true;
+//   };
 
-  const startGame = () => {
-    board = gameBoard();
-    players = getplayers();
-    activePlayer = players[0];
-    if (winner && winner.name == activePlayer.name) switchPlayer();
-    winner = '';
-    gameRunning = true;
-    console.log(`${activePlayer.name}'s turn`);
-    console.log(board.getBoard());
-  };
+//   return { getBoard, placeToken }
 
-  const playRound = (row, column) => {
-    if (gameRunning) {
+// };
+// const gameController = (() => {
 
-      if (board.placeToken(row, column, activePlayer.token)) {
-        if (checkForWin(activePlayer.token)) {
-          winner = activePlayer;
-          console.log(`${winner.name} won`);
-          gameRunning = false;
-        };
-        if (checkForTie()) {
-          console.log(`That's a tie.`);
-          gameRunning = false;
-        };
-        switchPlayer();
-      };
+//   const getplayers = () => {
+//     const playerOneInput = document.querySelector('#playerOne');
+//     const playerTwoInput = document.querySelector('#playerTwo');
 
-      if (gameRunning) console.log(`${activePlayer.name}'s turn`);
-      console.log(board.getBoard());
+//     const playerOneName = playerOneInput.value ? playerOneInput.value : 'Player 1';
+//     const playerTwoName = playerTwoInput.value ? playerTwoInput.value : 'Player 2';
 
-    };
-  };
+//     return [
+//       {
+//         name: playerOneName,
+//         token: "X"
+//       },
+//       {
+//         name: playerTwoName,
+//         token: "O"
+//       }
+//     ]
+//   };
 
-  const checkForWin = (token) => {
-    const grid = board.getBoard();
-    if (
-      // check rows
-      (
-        grid[0][0] == token &&
-        grid[0][1] == token &&
-        grid[0][2] == token
-      ) ||
-      (
-        grid[1][0] == token &&
-        grid[1][1] == token &&
-        grid[1][2] == token
-      ) ||
-      (
-        grid[2][0] == token &&
-        grid[2][1] == token &&
-        grid[2][2] == token
-      ) ||
-      (
-        // check columns
-        grid[0][0] == token &&
-        grid[1][0] == token &&
-        grid[2][0] == token
-      ) ||
-      (
-        grid[0][1] == token &&
-        grid[1][1] == token &&
-        grid[2][1] == token
-      ) ||
-      (
-        grid[0][2] == token &&
-        grid[1][2] == token &&
-        grid[2][2] == token
-      ) ||
-      (
-        // check for diagonals
-        grid[0][0] == token &&
-        grid[1][1] == token &&
-        grid[2][2] == token
-      ) ||
-      (
-        grid[0][2] == token &&
-        grid[1][1] == token &&
-        grid[2][0] == token
-      )
-    ) {
-      return true
-    };
-    return false
-  };
+//   let board;
+//   let players;
+//   let activePlayer;
+//   let winner;
+//   let gameRunning = false;
 
-  const checkForTie = () => {
-    const grid = board.getBoard();
-    if (
-      !checkForWin() &&
-      grid[0][0] &&
-      grid[0][1] &&
-      grid[0][2] &&
-      grid[1][0] &&
-      grid[1][1] &&
-      grid[1][2] &&
-      grid[2][0] &&
-      grid[2][1] &&
-      grid[2][2]
-    ) return true;
-    return false;
-  };
+//   const startGame = () => {
+//     board = gameBoard();
+//     players = getplayers();
+//     activePlayer = players[0];
+//     if (winner && winner.name == activePlayer.name) switchPlayer();
+//     winner = '';
+//     gameRunning = true;
+//     console.log(`${activePlayer.name}'s turn`);
+//     console.log(board.getBoard());
+//   };
 
-  const switchPlayer = () => {
-    activePlayer = activePlayer === players[0] ? players[1] : players[0];
-  };
+//   const playRound = (row, column) => {
+//     if (gameRunning) {
 
-  const getBoard = () => board.getBoard();
-  const getActivePlayer = () => activePlayer;
-  const getWinner = () => winner;
+//       if (board.placeToken(row, column, activePlayer.token)) {
+//         if (checkForWin(activePlayer.token)) {
+//           winner = activePlayer;
+//           console.log(`${winner.name} won`);
+//           gameRunning = false;
+//         };
+//         if (checkForTie()) {
+//           console.log(`That's a tie.`);
+//           gameRunning = false;
+//         };
+//         switchPlayer();
+//       };
 
-  return { startGame, playRound, getBoard, getplayers, getActivePlayer, getWinner }
+//       if (gameRunning) console.log(`${activePlayer.name}'s turn`);
+//       console.log(board.getBoard());
 
-})();
+//     };
+//   };
 
-const screenController = (() => {
-  const game = gameController;  // need: activePlayer, board, winner
-  const startButton = document.querySelector('#startButton');
-  const gameBoardDiv = document.querySelector('#grid');
-  const infoDiv = document.querySelector('#info');
+//   const checkForWin = (token) => {
+//     const grid = board.getBoard();
+//     if (
+//       // check rows
+//       (
+//         grid[0][0] == token &&
+//         grid[0][1] == token &&
+//         grid[0][2] == token
+//       ) ||
+//       (
+//         grid[1][0] == token &&
+//         grid[1][1] == token &&
+//         grid[1][2] == token
+//       ) ||
+//       (
+//         grid[2][0] == token &&
+//         grid[2][1] == token &&
+//         grid[2][2] == token
+//       ) ||
+//       (
+//         // check columns
+//         grid[0][0] == token &&
+//         grid[1][0] == token &&
+//         grid[2][0] == token
+//       ) ||
+//       (
+//         grid[0][1] == token &&
+//         grid[1][1] == token &&
+//         grid[2][1] == token
+//       ) ||
+//       (
+//         grid[0][2] == token &&
+//         grid[1][2] == token &&
+//         grid[2][2] == token
+//       ) ||
+//       (
+//         // check for diagonals
+//         grid[0][0] == token &&
+//         grid[1][1] == token &&
+//         grid[2][2] == token
+//       ) ||
+//       (
+//         grid[0][2] == token &&
+//         grid[1][1] == token &&
+//         grid[2][0] == token
+//       )
+//     ) {
+//       return true
+//     };
+//     return false
+//   };
 
-  const updateScreen = () => {
-    gameBoardDiv.textContent = '';
+//   const checkForTie = () => {
+//     const grid = board.getBoard();
+//     if (
+//       !checkForWin() &&
+//       grid[0][0] &&
+//       grid[0][1] &&
+//       grid[0][2] &&
+//       grid[1][0] &&
+//       grid[1][1] &&
+//       grid[1][2] &&
+//       grid[2][0] &&
+//       grid[2][1] &&
+//       grid[2][2]
+//     ) return true;
+//     return false;
+//   };
 
-    const board = game.getBoard();
-    const activePlayer = game.getActivePlayer();
-    const winner = game.getWinner();
+//   const switchPlayer = () => {
+//     activePlayer = activePlayer === players[0] ? players[1] : players[0];
+//   };
+
+//   const getBoard = () => board.getBoard();
+//   const getActivePlayer = () => activePlayer;
+//   const getWinner = () => winner;
+
+//   return { startGame, playRound, getBoard, getplayers, getActivePlayer, getWinner }
+
+// })();
+
+// const screenController = (() => {
+//   const game = gameController;  // need: activePlayer, board, winner
+//   const startButton = document.querySelector('#startButton');
+//   const gameBoardDiv = document.querySelector('#grid');
+//   const infoDiv = document.querySelector('#info');
+
+//   const updateScreen = () => {
+//     gameBoardDiv.textContent = '';
+
+//     const board = game.getBoard();
+//     const activePlayer = game.getActivePlayer();
+//     const winner = game.getWinner();
   
-    let infoText = `${activePlayer.name}'s turn`;
-    if (winner) {
-      infoText = `${winner.name} won.`;
-    };
-    infoDiv.textContent = infoText;
+//     let infoText = `${activePlayer.name}'s turn`;
+//     if (winner) {
+//       infoText = `${winner.name} won.`;
+//     };
+//     infoDiv.textContent = infoText;
 
-    board.forEach((row, rowIndex) => {
-      row.forEach((cell, columnIndex) => {
-        const cellButton = document.createElement("button");
-        cellButton.classList.add("cell");
-        cellButton.dataset.row = rowIndex;
-        cellButton.dataset.column = columnIndex;
-        cellButton.textContent = cell.valueOf();
-        gameBoardDiv.appendChild(cellButton);
-      });
-    });
-  };
+//     board.forEach((row, rowIndex) => {
+//       row.forEach((cell, columnIndex) => {
+//         const cellButton = document.createElement("button");
+//         cellButton.classList.add("cell");
+//         cellButton.dataset.row = rowIndex;
+//         cellButton.dataset.column = columnIndex;
+//         cellButton.textContent = cell.valueOf();
+//         gameBoardDiv.appendChild(cellButton);
+//       });
+//     });
+//   };
 
-  const clickEventHandler = (e) => {
-    const selectedRow = e.target.dataset.row;
-    const selectedColumn = e.target.dataset.column;
+//   const clickEventHandler = (e) => {
+//     const selectedRow = e.target.dataset.row;
+//     const selectedColumn = e.target.dataset.column;
 
-    if (!selectedRow && !selectedColumn) return;
+//     if (!selectedRow && !selectedColumn) return;
 
-    game.playRound(selectedRow, selectedColumn);
-    updateScreen();
-  };
-  gameBoardDiv.addEventListener('click', clickEventHandler);
-  startButton.addEventListener('click', () => {
-    game.startGame();
-    updateScreen();
-  });
+//     game.playRound(selectedRow, selectedColumn);
+//     updateScreen();
+//   };
+//   gameBoardDiv.addEventListener('click', clickEventHandler);
+//   startButton.addEventListener('click', () => {
+//     game.startGame();
+//     updateScreen();
+//   });
 
-  game.startGame();
-  updateScreen();
+//   game.startGame();
+//   updateScreen();
 
-})();
+// })();
 
-game = screenController;
+// game = screenController;
