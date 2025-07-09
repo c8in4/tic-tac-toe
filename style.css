@@ -159,67 +159,52 @@ footer {
 }
 
 main {
-  /* margin: 1rem;
-  */
   flex: 1;
-  /* 
+  padding: 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem; */
-}
-
-/* #inputs {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
   gap: 1rem;
 }
 
-input {
-  border: none;
-  background-color: #eee;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-}
 
-button {
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  font-weight: bold;
-}
-
-button:hover {
-  background-color: #afafaf;
-}
-
-#grid {
-  width: min(70vw, 70vh);
-  aspect-ratio: 1;
-  display: grid;
-  grid-template-rows: repeat(3, 1fr);
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.5rem;
-  background-color: black;
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-}
-
-#grid button {
+#inputs-container {
   display: flex;
-  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
   justify-content: center;
-  background-color: white;
-  border: none;
+
+  p {
+    font-weight: bold;
+    font-size: 1.5rem;
+    text-align: center;
+  }
+
+  input {
+    width: 20ch;
+    border-radius: 0.5rem;
+    background-color: var(--clr-bg-light);
+    color: var(--clr-text);
+    text-align: center;
+  }
+}
+
+#start-button {
+  background-color: var(--clr-primary);
+  color: var(--clr-text);
   border-radius: 0.5rem;
-  font-size: 15cqmin;
+  padding: 0 0.5rem;
 }
 
-#grid button:hover {
-  background-color: #eee;
+#start-button:hover {
+  background-color: var(--clr-secondary);
 }
 
-input {
-  text-align: center;
-} */
+#info-container {}
+
+#gameboard-display {
+  display: grid;
+  aspect-ratio: 1;
+  grid-template-columns: repeat(3, 5rem);
+  grid-template-rows: repeat(3, 5rem);
+}
