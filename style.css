@@ -130,8 +130,8 @@ body {
   color: var(--clr-text);
   height: 100dvh;
   width: 100dvw;
-  /* display: flex;
-  flex-direction: column; */
+  display: flex;
+  flex-direction: column;
 }
 
 *,
@@ -143,21 +143,26 @@ body {
 }
 
 body {
-  height: 100vh;
+  height: 100dvh;
+  width: 100dvw;
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: center;
 }
 
 header,
 footer {
   padding: 1rem 0;
+  width: 100%;
+  text-align: center;
+  background-color: var(--clr-primary);
 }
 
 main {
   /* margin: 1rem;
+  */
   flex: 1;
+  /* 
   display: flex;
   flex-direction: column;
   align-items: center;
