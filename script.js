@@ -10,7 +10,7 @@ const gameboard = (function () {
 				gameboard[row][col] = ''
 			}
 		}
-		console.log('new gameboard created')
+		console.log('gameboard: new gameboard created')
 	}
 
 	const getGameBoard = () => gameboard
@@ -30,6 +30,7 @@ const gameboard = (function () {
 
 const player = (function () {
 	function createPlayer(name, token) {
+		console.log(`created a new player with player name: ${name} and token: ${token}`)
 		return { name, token }
 	}
 
@@ -39,10 +40,15 @@ const player = (function () {
 	const players = [player1, player2]
 
 	const updatePlayerNames = (p1Name, p2Name) => {
-		if (p1Name) player1.name = p1Name
-		if (p2Name) player2.name = p2Name
+		if (p1Name) {
+			player1.name = p1Name
+			console.log(`updated player 1 name to ${p1Name}`)
+		} else player1.name = 'Player 1'
+		if (p2Name) {
+			player2.name = p2Name
+			console.log(`updated player 2 name to ${p2Name}`)
+		} else player2.name = 'Player 2'
 	}
-
 
 	const getPlayers = () => players
 
@@ -52,10 +58,12 @@ const player = (function () {
 const game = (function () {
 	let currentPlayerIndex = 0
 	let gameActive = true
+	let message = ''
 
 	function switchPlayer() {
 		currentPlayerIndex = currentPlayerIndex ? 0 : 1
-		console.log(getCurrentPlayer().name + "'s turn")
+		message = 'It is ' + getCurrentPlayer().name + "'s turn"
+		screenController.updateInfoContainer(message)
 	}
 
 	const getCurrentPlayer = () => player.getPlayers()[currentPlayerIndex]
@@ -64,14 +72,16 @@ const game = (function () {
 		if (gameActive) {
 			const currentToken = getCurrentPlayer().token
 			if (gameboard.placeToken(row, col, currentToken)) {
-				screenController.updateDisplay()
+				screenController.updateGameboard()
 				if (checkForWin(currentToken)) {
-					console.log('The winner is: ' + getCurrentPlayer().name)
+					message = 'Game over! The winner is: ' + getCurrentPlayer().name + '!'
+					screenController.updateInfoContainer(message)
 					gameActive = false
 					return
 				}
 				if (checkForTie()) {
-					console.log("That's a tie")
+					message = "Game over! That's a tie."
+					screenController.updateInfoContainer(message)
 					gameActive = false
 					return
 				}
@@ -82,8 +92,10 @@ const game = (function () {
 
 	const startNewGame = () => {
 		gameboard.cerateNewGameboard()
-		screenController.updateDisplay()
-		currentPlayerIndex = 0
+		screenController.updateGameboard()
+		switchPlayer()
+		message = 'New game! It is ' + getCurrentPlayer().name + "'s turn"
+		screenController.updateInfoContainer(message)
 		gameActive = true
 	}
 
@@ -121,6 +133,7 @@ const screenController = (() => {
 	const startNewGameButton = document.querySelector('#start-button')
 	const playerOneInput = document.querySelector('#player-one-input')
 	const playerTwoInput = document.querySelector('#player-two-input')
+	const infoContainer = document.querySelector('#info-container')
 
 	const board = gameboard.getGameBoard()
 
@@ -129,7 +142,6 @@ const screenController = (() => {
 	function startNewGameButtonClickHandler() {
 		const player1Name = playerOneInput.value
 		const player2Name = playerTwoInput.value
-		console.log({ player1Name, player2Name })
 		player.updatePlayerNames(player1Name, player2Name)
 		game.startNewGame()
 	}
@@ -146,7 +158,7 @@ const screenController = (() => {
 		game.playRound(row, col)
 	}
 
-	function updateDisplay() {
+	function updateGameboard() {
 		resetBoard()
 		renderButtons()
 	}
@@ -171,7 +183,18 @@ const screenController = (() => {
 		gameboardDisplay.innerText = ''
 	}
 
-	return { updateDisplay }
+	function updateInfoContainer(message) {
+		resetInfoContainer()
+		const contentToDisplay = document.createElement('p')
+		contentToDisplay.innerText = message
+		infoContainer.appendChild(contentToDisplay)
+	}
+
+	function resetInfoContainer() {
+		infoContainer.innerText = ''
+	}
+
+	return { updateGameboard, updateInfoContainer }
 })();
 
 game.startNewGame()
