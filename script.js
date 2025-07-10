@@ -33,15 +33,20 @@ const player = (function () {
 		return { name, token }
 	}
 
-	const player1Name = 'Player 1'
-	const player2Name = 'Player 2'
+	let player1 = createPlayer('Player 1', 'X')
+	let player2 = createPlayer('Player 2', 'O')
 
-	const player1 = createPlayer(player1Name, 'X')
-	const player2 = createPlayer(player2Name, 'O')
 	const players = [player1, player2]
+
+	const updatePlayerNames = (p1Name, p2Name) => {
+		if (p1Name) player1.name = p1Name
+		if (p2Name) player2.name = p2Name
+	}
+
+
 	const getPlayers = () => players
 
-	return { getPlayers }
+	return { updatePlayerNames, getPlayers }
 })();
 
 const game = (function () {
@@ -50,7 +55,7 @@ const game = (function () {
 
 	function switchPlayer() {
 		currentPlayerIndex = currentPlayerIndex ? 0 : 1
-		console.log(getCurrentPlayer().token + "'s turn")
+		console.log(getCurrentPlayer().name + "'s turn")
 	}
 
 	const getCurrentPlayer = () => player.getPlayers()[currentPlayerIndex]
@@ -113,15 +118,33 @@ const game = (function () {
 
 const screenController = (() => {
 	const gameboardDisplay = document.querySelector('#gameboard-display')
+	const startNewGameButton = document.querySelector('#start-button')
+	const playerOneInput = document.querySelector('#player-one-input')
+	const playerTwoInput = document.querySelector('#player-two-input')
+
 	const board = gameboard.getGameBoard()
+
+	startNewGameButton.addEventListener('click', startNewGameButtonClickHandler)
+
+	function startNewGameButtonClickHandler() {
+		const player1Name = playerOneInput.value
+		const player2Name = playerTwoInput.value
+		console.log({ player1Name, player2Name })
+		player.updatePlayerNames(player1Name, player2Name)
+		game.startNewGame()
+	}
 
 	gameboardDisplay.addEventListener('click', event => {
 		if (event.target.dataset.row && event.target.dataset.col) {
-			const buttonRow = event.target.dataset.row
-			const buttonCol = event.target.dataset.col
-			game.playRound(buttonRow, buttonCol)
+			gameboardButtonClickHandler(event.target)
 		}
 	})
+
+	function gameboardButtonClickHandler(button) {
+		const row = button.dataset.row
+		const col = button.dataset.col
+		game.playRound(row, col)
+	}
 
 	function updateDisplay() {
 		resetBoard()
