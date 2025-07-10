@@ -3,6 +3,8 @@ const gameboard = (function () {
 	const gameboardRows = 3
 	const gameboardColumns = 3
 
+	cerateNewGameboard()
+
 	function cerateNewGameboard() {
 		for (let row = 0; row < gameboardRows; row++) {
 			gameboard[row] = []
@@ -46,7 +48,7 @@ const player = (function () {
 
 const game = (function () {
 	let currentPlayerIndex = 0
-	let gameActive = false
+	let gameActive = true
 
 	function switchPlayer() {
 		currentPlayerIndex = currentPlayerIndex ? 0 : 1
@@ -66,6 +68,7 @@ const game = (function () {
 				console.log("That's a tie")
 				gameActive = false
 			}
+			screenController.updateDisplay()
 		}
 		if (gameActive) switchPlayer()
 	}
@@ -106,8 +109,36 @@ const game = (function () {
 	return { startNewGame, playRound }
 })();
 
+const screenController = (() => {
+	const gameboardDisplay = document.querySelector('#gameboard-display')
+
+	const board = gameboard.getGameBoard()
+
+	function updateDisplay() {
+		resetBoard()
+		board.forEach((row, rowIndex) => {
+			row.forEach((cellValue, colIndex) => {
+				appendButton(cellValue, rowIndex, colIndex)
+			})
+		});
+	}
+
+	function appendButton(token, row, col) {
+		const button = document.createElement('button')
+		button.innerText = token
+		button.dataset.row = row
+		button.dataset.col = col
+		gameboardDisplay.appendChild(button)
+	}
+
+	function resetBoard() {
+		gameboardDisplay.innerText = ''
+	}
+
+	return { updateDisplay, resetBoard }
+})();
+
 function testXWin() {
-	game.startNewGame()
 	game.playRound(0, 0)
 	game.playRound(0, 1)
 	game.playRound(1, 0)
@@ -116,7 +147,6 @@ function testXWin() {
 }
 
 function testYWin() {
-	game.startNewGame()
 	game.playRound(0, 0)
 	game.playRound(0, 1)
 	game.playRound(1, 0)
@@ -126,7 +156,6 @@ function testYWin() {
 }
 
 function testTie() {
-	game.startNewGame()
 	game.playRound(0, 0)
 	game.playRound(0, 1)
 	game.playRound(1, 0)
