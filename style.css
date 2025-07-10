@@ -199,10 +199,9 @@ main {
 #info-container {}
 
 #gameboard-display {
-  /* padding: 0.5rem; */
   border-radius: 0.5rem;
   background-color: var(--clr-highlight);
-  border: 0.1rem solid var(--clr-border);
+  outline: 0.1rem solid var(--clr-border);
   display: grid;
   aspect-ratio: 1;
   grid-template-columns: repeat(3, 5rem);

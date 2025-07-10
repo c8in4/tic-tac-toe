@@ -3,8 +3,6 @@ const gameboard = (function () {
 	const gameboardRows = 3
 	const gameboardColumns = 3
 
-	cerateNewGameboard()
-
 	function cerateNewGameboard() {
 		for (let row = 0; row < gameboardRows; row++) {
 			gameboard[row] = []
@@ -58,23 +56,28 @@ const game = (function () {
 	const getCurrentPlayer = () => player.getPlayers()[currentPlayerIndex]
 
 	const playRound = (row, col) => {
-		const currentToken = getCurrentPlayer().token
-		if (gameboard.placeToken(row, col, currentToken)) {
-			if (checkForWin(currentToken)) {
-				console.log('The winner is: ' + getCurrentPlayer().name)
-				gameActive = false
+		if (gameActive) {
+			const currentToken = getCurrentPlayer().token
+			if (gameboard.placeToken(row, col, currentToken)) {
+				screenController.updateDisplay()
+				if (checkForWin(currentToken)) {
+					console.log('The winner is: ' + getCurrentPlayer().name)
+					gameActive = false
+					return
+				}
+				if (checkForTie()) {
+					console.log("That's a tie")
+					gameActive = false
+					return
+				}
 			}
-			if (checkForTie()) {
-				console.log("That's a tie")
-				gameActive = false
-			}
-			screenController.updateDisplay()
+			switchPlayer()
 		}
-		if (gameActive) switchPlayer()
 	}
 
 	const startNewGame = () => {
 		gameboard.cerateNewGameboard()
+		screenController.updateDisplay()
 		currentPlayerIndex = 0
 		gameActive = true
 	}
@@ -105,17 +108,27 @@ const game = (function () {
 		) return true
 	}
 
-
 	return { startNewGame, playRound }
 })();
 
 const screenController = (() => {
 	const gameboardDisplay = document.querySelector('#gameboard-display')
-
 	const board = gameboard.getGameBoard()
+
+	gameboardDisplay.addEventListener('click', event => {
+		if (event.target.dataset.row && event.target.dataset.col) {
+			const buttonRow = event.target.dataset.row
+			const buttonCol = event.target.dataset.col
+			game.playRound(buttonRow, buttonCol)
+		}
+	})
 
 	function updateDisplay() {
 		resetBoard()
+		renderButtons()
+	}
+
+	function renderButtons() {
 		board.forEach((row, rowIndex) => {
 			row.forEach((cellValue, colIndex) => {
 				appendButton(cellValue, rowIndex, colIndex)
@@ -135,8 +148,10 @@ const screenController = (() => {
 		gameboardDisplay.innerText = ''
 	}
 
-	return { updateDisplay, resetBoard }
+	return { updateDisplay }
 })();
+
+game.startNewGame()
 
 function testXWin() {
 	game.playRound(0, 0)
